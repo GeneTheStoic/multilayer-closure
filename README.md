@@ -110,8 +110,8 @@ python step7_figures_inequivalence.py
 
 - Benjamini, Y., and Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
 - Bokányi, E., Heemskerk, E. M., and Takes, F. W. (2023). The anatomy of a population-scale social network. *Scientific Reports*, 13, 9209.
-- Bokányi, E., Kazmina, Y., Heemskerk, E. M., and Takes, F. W. (2026). Fragmentation of a longitudinal population-scale social network: Decreasing network closure in the Netherlands. arXiv:2602.00234.
-- Kazmina, Y., Heemskerk, E. M., Bokányi, E., and Takes, F. W. (2024). Socio-economic segregation in a population-scale social network. *Social Networks*.
+- Bokányi, E., Kazmina, Y., Heemskerk, E. M., and Takes, F. W. (2026). Fragmentation of a longitudinal population-scale social network: Decreasing structural social cohesion in the Netherlands. arXiv:2602.00234.
+- Kazmina, Y., Heemskerk, E. M., Bokányi, E., and Takes, F. W. (2024). Socio-economic segregation in a population-scale social network. *Social Networks*, 78, 279–291.
 - Lazega, E. (2001). *The Collegial Phenomenon: The Social Mechanisms of Cooperation Among Peers in a Corporate Law Partnership*. Oxford University Press.
 - mlnlib: https://github.com/planet-nl/mlnlib
 - Székely, G. J., and Rizzo, M. L. (2013). Energy statistics: A class of statistics based on distances. *Journal of Statistical Planning and Inference*, 143(8), 1249–1272.
