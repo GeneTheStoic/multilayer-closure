@@ -1,5 +1,7 @@
 # Multilayer closure and subgroup structure in a social network
 
+**Working paper (7 pages, PDF):** [Who Connects and How: A Null-Model Index of Structural Inequivalence Between Subgroups in Multilayer Social Networks](report/Multilayer_Inequivalence_Guilarte_Homayden.pdf)
+
 A small, reproducible study of how social contexts overlap in a multilayer network and how network structure differs between subgroups, tested against null models, with a proposed **structural (in)equivalence index** validated by simulation on synthetic register-like populations. It uses **mlnlib**, the library developed for the Dutch population-scale network, and its **excess closure** measure, on a public multiplex network: the Lazega law firm.
 
 ## Questions

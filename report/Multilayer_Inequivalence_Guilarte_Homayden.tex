@@ -1,0 +1,199 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{setspace}
+\usepackage[authoryear,round]{natbib}
+\setstretch{1.08}
+\setlength{\parskip}{0.35em}
+
+\title{Who Connects and How: A Null-Model Index of Structural Inequivalence Between Subgroups in Multilayer Social Networks}
+\author{Eugenio Guilarte Homayden\thanks{University of Macerata. E-mail: \texttt{euge.guilarte@gmail.com}. Code, data, and results: \url{https://github.com/GeneTheStoic/multilayer-closure}.}}
+\date{Working paper, October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent Differences between groups in a social network are usually compared through assortativity, which measures whom people connect to. This paper proposes a structural inequivalence index, which measures what the personal networks of each group look like. Each person is described by a multilayer profile, and the profile distribution of a group is compared with that of the rest of the network through the energy distance, relative to shuffled labels and decomposed by layer. The index is applied to the Lazega law firm, a public network of 71 lawyers with three layers. The two measures diverge. Practice is strongly assortative in advice and coworking, yet corporate and litigation lawyers have equivalent personal networks. Gender shows the opposite pattern: it is not assortative in coworking, but the coworking networks of men and women differ in shape. On simulated register-like populations, the index has a false-positive rate of 2\%, detects a planted 50\% difference in 77\% of runs, and identifies the layer where the difference was planted in 93\% of them. Because the index is computed on samples of people, its cost does not grow with the size of the population.
+
+\medskip
+\noindent\raggedright\textbf{Keywords:} multilayer networks; structural inequivalence; assortativity; null models; population-scale networks\par
+\end{abstract}
+
+\section{Introduction}
+Due to the availability of register data, it is now possible to observe the social network of an entire country. In the Netherlands, data from Statistics Netherlands link almost all residents through five types of ties: family, household, work, school, and neighbors. This multilayer network has been used to study particular aspects, such as its overall structure \citep{bokanyi2023}, socio-economic segregation \citep{kazmina2024}, and the decline in network closure between 2010 and 2021 \citep{bokanyi2026}. The next question that arises is how network structure differs between groups of the population.
+
+The main problem comes from relying on assortativity, the tendency of ties to connect people with the same attribute. Assortativity measures whom people connect to. It does not measure what their personal networks look like: how many contacts they have in each context, how much those contexts overlap, and how closed their circle is. Two groups can be strongly segregated and still have personal networks of the same shape, and two groups that mix freely can still have personal networks of very different shape. A second measure is therefore needed.
+
+In this paper, that second measure, a structural inequivalence index, is proposed and tested in two settings. The first is a small public network in which every result can be inspected: 71 lawyers linked through advice, friendship, and coworking, three layers that play the role of family, work, and neighborhood in register data. The second is a set of simulated register-like populations in which the true difference between groups is known. All code is open and built on \texttt{mlnlib},\footnote{\url{https://github.com/planet-nl/mlnlib}} the library used for the Dutch population-scale network.
+
+\section{Data}
+The data come from the Lazega law firm network \citep{lazega2001}, downloaded from the public Netzschleuder catalogue. It covers 71 lawyers of a corporate law firm in New England and records three relationships among them: advice, friendship, and coworking.
+
+The original nominations are directed: lawyer A names lawyer B. They are converted into undirected ties, so a tie exists if either of the two lawyers names the other. This leaves 717 advice ties, 399 friendship ties, and 726 coworking ties.
+
+Four attributes define the groups that are compared: status (36 partners and 35 associates), office (Boston 48, Hartford 19, and Providence 4), practice (41 litigation and 30 corporate), and gender (53 men and 18 women).
+
+\section{Methods}
+\subsection{Multilayer network and node measures}
+The network is stored in \texttt{mlnlib}, which saves the layers of each pair of people in a single number. For each lawyer, five measures are calculated: degree in each layer (the number of contacts); multiplexity (the share of contacts linked in two or more layers); clustering on the aggregate network (whether a lawyer's contacts know each other); excess closure, the measure implemented in \texttt{mlnlib}; and the cross-layer triangle share (the share of closed triangles that need more than one layer to close).
+
+In a small, dense network such as this one, the multiplicity-weighted clustering used by \texttt{mlnlib} exceeds 1 (the mean is 1.26), so excess closure is hard to read on an absolute scale. For that reason, the cross-layer triangle share is also used, since it is bounded between 0 and 1 and can be read directly.
+
+\subsection{Null models}
+Two null models are used. First, label permutation keeps the network fixed and shuffles the attribute labels (10,000 permutations). It is used to test the share of within-group ties and the differences in node measures between groups, which are reported with 90\% bootstrap intervals (2,000 resamples of lawyers). Second, degree-preserving rewiring swaps edges within each layer independently (500 rewired networks). Each lawyer keeps the same degree in every layer, but the alignment between layers is destroyed; this null model is used for the overlap of contexts. Within each family of tests, p-values are adjusted with the Benjamini--Hochberg correction \citep{benjamini1995}.
+
+\subsection{Structural inequivalence index}
+Each lawyer is described by a profile $x$: degree in each layer, multiplexity, aggregate clustering, and cross-layer triangle share, all standardized. The index compares the profile distribution of a group $G$ with that of the rest of the firm $R$ through the energy distance \citep{szekely2013}:
+\begin{equation}
+E(G,R) = \frac{2}{n_G n_R}\sum_{i\in G}\sum_{j\in R}\lVert x_i - x_j\rVert
+ - \frac{1}{n_G^2}\sum_{i,i'\in G}\lVert x_i - x_{i'}\rVert
+ - \frac{1}{n_R^2}\sum_{j,j'\in R}\lVert x_j - x_{j'}\rVert .
+\end{equation}
+The energy distance is zero only if the two distributions are identical, and it is sensitive to differences in level, spread, and shape. Because its scale depends on group size, it is reported relative to shuffled labels: the excess is the observed value divided by its mean under shuffled labels (5,000 permutations), so 1 means no difference. P-values come from the same permutations, with the Benjamini--Hochberg correction across groups. A layer decomposition applies the same index to the degree and clustering of one layer at a time, which shows which context drives a difference.
+
+\subsection{Assortativity}
+For comparison, attribute assortativity \citep{newman2003} is computed for each attribute and each layer. It is the same measure used for income segregation in the Dutch network \citep{kazmina2024}, here with a null of 1,000 label permutations.
+
+\subsection{Simulation}
+To test the index where the true answer is known, synthetic register-like populations of 1,000 people are generated with four layers: households of one to four people (complete); extended family linking related households (tie probability 0.4); workplaces of about 25 people, with 70\% of people employed (base tie probability 0.15); and neighborhoods (tie probability 0.05). Thirty percent of people form group A. A planted effect $\delta$ multiplies the tie probability among A's coworkers by $(1+\delta)$, and between A and other coworkers by $(1+\delta/2)$. With $\delta=0$ the two groups are identical by construction. For each value of $\delta$, three quantities are recorded: the share of populations in which the index flags A at $p<0.05$ (99 permutations), the median index value, and how often the decomposition ranks the work layer first. One hundred populations are used for $\delta=0$ and 30 for each other value.
+
+\subsection{Scaling}
+Populations of 10,000 and 100,000 people are generated (45,524 and 455,426 ties). Three steps are timed: network generation, \texttt{mlnlib} excess closure on 5,000 sampled egos, and the index on a sample of 2,000 people.
+
+\section{Results}
+\subsection{Overlap of contexts}
+The three relationships overlap far more than chance would imply (Table~\ref{tab:overlap}). Sixty percent of ties are multiplex, against 32\% when each layer is rewired independently ($z=28.7$), and mean excess closure is 1.34 against 0.98. Because the same lawyers meet across advice, friendship, and work, most triangles close within a single layer: only 24\% need more than one layer, against 62\% in the rewired networks.
+
+\begin{table}[h]
+\centering\small
+\caption{Overlap of contexts against degree-preserving rewiring of each layer (500 rewired networks).}
+\label{tab:overlap}
+\begin{tabular}{lcc}
+\toprule
+Measure & Observed & Rewired layers: mean (90\% range)\\
+\midrule
+Multiplex ties (share) & 0.60 & 0.32 (0.31--0.34)\\
+Mean excess closure (\texttt{mlnlib}) & 1.34 & 0.98 (0.97--0.99)\\
+Cross-layer triangle share & 0.24 & 0.62 (0.61--0.64)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Which attribute organizes which layer}
+Relative to shuffled labels, office organizes all three layers (1.44 to 1.61 times the expected share of within-group ties), and practice organizes advice and coworking (1.46) more than friendship (1.21). Status organizes friendship (1.56) and advice (1.27), while coworking shows no status preference (1.01, $q=0.32$). Compared with partners, associates have fewer contacts (24.8 against 31.9, $q=0.02$), lower multiplexity (0.55 against 0.63, $q=0.08$), and higher clustering (0.60 against 0.55, $q=0.08$).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.72\textwidth]{fig1_mixing_by_layer.png}
+\caption{Share of within-group ties relative to shuffled labels, by layer and attribute. Values above 1 indicate that the attribute organizes the layer.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{fig2_partners_vs_associates.png}
+\caption{Node measures of partners and associates: group means with 90\% bootstrap intervals (2,000 resamples).}
+\end{figure}
+
+\subsection{Structural inequivalence}
+Table~\ref{tab:ineq} reports the index for each group against the rest of the firm. Associates differ most from partners (3.73, $q=0.001$), and the decomposition locates the difference in advice (4.97) and coworking (5.35), while friendship is not significant (1.74). Men differ from women mainly in coworking (4.22), and the Boston office in friendship (4.77). The Providence office also differs in friendship (6.11), but with only four lawyers this result carries little weight. The Hartford office and the corporate practice show no significant difference.
+
+\begin{table}[h]
+\centering\small
+\caption{Structural inequivalence of each group against the rest of the firm (5,000 label permutations; Benjamini--Hochberg $q$ across groups) and its decomposition by layer (degree and clustering of one layer).}
+\label{tab:ineq}
+\footnotesize
+\begin{tabular}{lrccl}
+\toprule
+Group vs.\ rest & $n$ & Index ($\times$ shuffled) & $q$ & Driving layer ($\times$ shuffled)\\
+\midrule
+Associates & 35 & 3.73 & 0.001 & advice 4.97, coworking 5.35; friendship 1.74 (n.s.)\\
+Men & 53 & 2.20 & 0.03 & coworking 4.22; advice 2.71 (n.s.)\\
+Boston office & 48 & 2.00 & 0.04 & friendship 4.77\\
+Providence office & 4 & 2.26 & 0.03 & friendship 6.11 (four lawyers)\\
+Hartford office & 19 & 1.18 & 0.25 & none\\
+Corporate practice & 30 & 1.29 & 0.21 & none\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Segregation and structural inequivalence}
+The comparison with assortativity is the central result (Figure~\ref{fig:ineq}). Practice is strongly assortative in advice and coworking (0.44 and 0.46), but corporate and litigation lawyers have equivalent profiles (1.29, $q=0.21$): lawyers work mostly within their practice, yet both practices produce networks of the same size, overlap, and closure. Gender shows the opposite pattern: it is not assortative in coworking ($-0.04$, $q=0.74$), but the coworking networks of men differ in shape from those of women (4.22, $q=0.01$). Status splits across layers: it organizes friendship (assortativity 0.53), while partners and associates differ most in the shape of their advice and work networks, the layers where status assortativity is weak or absent. A comparison based on assortativity alone would therefore miss the gender difference and overstate the practice difference.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{fig3_inequivalence_vs_assortativity.png}
+\caption{Left: structural inequivalence by layer (personal-network profiles against shuffled labels; 1 = no difference). Right: attribute assortativity by layer (0 = no preference).}
+\label{fig:ineq}
+\end{figure}
+
+\subsection{Simulation}
+With no planted effect, the index flags group A in 2\% of 100 populations, below the nominal 5\% (Table~\ref{tab:sim}). Detection rises with the planted effect: 3\% at +10\%, 20\% at +25\%, 77\% at +50\%, and 100\% at +100\%, and the median index follows the size of the effect. The decomposition ranks the work layer first in 70\% of populations at +25\%, 93\% at +50\%, and all of them at +100\%. The index therefore detects the difference and locates the layer where it was planted.
+
+\begin{table}[h]
+\centering\small
+\caption{Simulation on synthetic register-like populations of 1,000 people (30\% in group A; 99 permutations per test).}
+\label{tab:sim}
+\begin{tabular}{lcccc}
+\toprule
+Planted effect $\delta$ & Runs & Flagged ($p<0.05$) & Median index & Work layer ranked first\\
+\midrule
+0 (none) & 100 & 2\% & 0.92 & --\\
+0.10 & 30 & 3\% & 0.93 & 10\%\\
+0.25 & 30 & 20\% & 1.25 & 70\%\\
+0.50 & 30 & 77\% & 2.04 & 93\%\\
+1.00 & 30 & 100\% & 3.44 & 100\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\textwidth]{fig4_simulation_power.png}
+\caption{Share of simulated populations in which the index flags group A (solid) and in which the layer decomposition ranks the work layer first (dashed). The dotted line marks the nominal 5\% level.}
+\end{figure}
+
+\subsection{Scaling}
+Generation takes 0.6 and 5.7 seconds for 10,000 and 100,000 people, excess closure on 5,000 egos takes 0.1 and 0.3 seconds, and the index takes about 3 seconds in both cases (Table~\ref{tab:scale}). Because the test runs on samples, its cost does not grow with population size. At national scale, the main cost is building the network, which \texttt{mlnlib} already does for the whole Dutch population.
+
+\begin{table}[h]
+\centering\small
+\caption{Runtime on synthetic populations.}
+\label{tab:scale}
+\begin{tabular}{rrccc}
+\toprule
+People & Ties & Generation & Excess closure (5,000 egos) & Index (2,000 people)\\
+\midrule
+10,000 & 45,524 & 0.6 s & 0.1 s & about 3 s\\
+100,000 & 455,426 & 5.7 s & 0.3 s & about 3 s\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discussion}
+Group comparisons in a social network need two complementary measures: assortativity, which captures whom people connect to, and structural inequivalence, which captures what their personal networks look like, each tested against a null model and decomposed by layer. Because the index is defined relative to shuffled labels and computed on samples, it can be applied to any subgroup of a register network and compared across populations of different size.
+
+\paragraph{Limitations.} The study covers one firm of 71 lawyers observed once, and its results describe this network, not law firms in general. Symmetrizing the nominations loses their direction, which matters for advice (who asks whom). With only four lawyers, the Providence office offers little statistical power. Label permutation treats all lawyers as exchangeable, so part of a difference between groups may reflect composition, for example office size; a null model that permutes labels within strata would remove it. The index detects a difference but not its direction, which is why the decomposition is needed. Finally, the simulated populations are stylized and not calibrated to Dutch registers.
+
+\paragraph{Extensions.} Three extensions follow. The first is a set of null models that preserve composition, such as household size or region. The second is the use of yearly snapshots from 2010 to 2021, to test whether the decline in closure affects all groups equally. The third is cross-country comparison, which requires separating real differences in social structure from differences in how registers define layers, for example by testing how sensitive the index is to the definition of each layer.
+
+\paragraph{Use of AI tools.} Claude (Anthropic) was used as an assistant for the Python implementation, the simulations, and language editing. All results can be reproduced from the public code.
+
+\begin{thebibliography}{9}
+\setlength{\itemsep}{0.15em}\small
+\bibitem[Benjamini and Hochberg(1995)]{benjamini1995} Benjamini, Y., and Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. \emph{Journal of the Royal Statistical Society: Series B}, 57(1), 289--300.
+\bibitem[Bok\'anyi et~al.(2023)]{bokanyi2023} Bok\'anyi, E., Heemskerk, E. M., and Takes, F. W. (2023). The anatomy of a population-scale social network. \emph{Scientific Reports}, 13, 9209.
+\bibitem[Bok\'anyi et~al.(2026)]{bokanyi2026} Bok\'anyi, E., Kazmina, Y., Heemskerk, E. M., and Takes, F. W. (2026). Fragmentation of a longitudinal population-scale social network: Decreasing structural social cohesion in the Netherlands. arXiv:2602.00234.
+\bibitem[Kazmina et~al.(2024)]{kazmina2024} Kazmina, Y., Heemskerk, E. M., Bok\'anyi, E., and Takes, F. W. (2024). Socio-economic segregation in a population-scale social network. \emph{Social Networks}, 78, 279--291.
+\bibitem[Lazega(2001)]{lazega2001} Lazega, E. (2001). \emph{The Collegial Phenomenon: The Social Mechanisms of Cooperation Among Peers in a Corporate Law Partnership}. Oxford University Press.
+\bibitem[Newman(2003)]{newman2003} Newman, M. E. J. (2003). Mixing patterns in networks. \emph{Physical Review E}, 67(2), 026126.
+\bibitem[Sz\'ekely and Rizzo(2013)]{szekely2013} Sz\'ekely, G. J., and Rizzo, M. L. (2013). Energy statistics: A class of statistics based on distances. \emph{Journal of Statistical Planning and Inference}, 143(8), 1249--1272.
+\end{thebibliography}
+\end{document}
