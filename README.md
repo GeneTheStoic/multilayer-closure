@@ -56,7 +56,7 @@ A small, reproducible study of how social contexts overlap in a multilayer netwo
 | Associates | 3.7 | 0.001 | advice (5.0) and coworking (5.3), not friendship (1.7, n.s.) |
 | Men | 2.2 | 0.03 | coworking (4.2) |
 | Boston office | 2.0 | 0.04 | friendship (4.8) |
-| Corporate practice | 1.3 | 0.22 (n.s.) | none |
+| Corporate practice | 1.3 | 0.21 (n.s.) | none |
 
 **Segregation and structural inequivalence are different things.** Practice is strongly assortative in advice and coworking (0.44–0.46), yet corporate and litigation lawyers have equivalent personal-network profiles. Gender is not assortative in coworking (−0.04), yet men's coworking networks differ in shape from women's (4.2 times shuffled labels). Status shows the reverse split across layers: it organizes *who befriends whom* (assortativity 0.53), while partners and associates differ most in the *shape* of their advice and work networks. A measure of group differences therefore needs both views: whom people connect to, and what their personal networks look like.
 

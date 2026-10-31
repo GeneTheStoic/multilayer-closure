@@ -8,6 +8,7 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{microtype}
 \usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Who Connects and How: A Null-Model Index of Structural Inequivalence Between Subgroups in Multilayer Social Networks},pdfauthor={Eugenio Guilarte Homayden}}
 \usepackage{setspace}
 \usepackage[authoryear,round]{natbib}
 \setstretch{1.08}
@@ -32,7 +33,7 @@ Due to the availability of register data, it is now possible to observe the soci
 
 The main problem comes from relying on assortativity, the tendency of ties to connect people with the same attribute. Assortativity measures whom people connect to. It does not measure what their personal networks look like: how many contacts they have in each context, how much those contexts overlap, and how closed their circle is. Two groups can be strongly segregated and still have personal networks of the same shape, and two groups that mix freely can still have personal networks of very different shape. A second measure is therefore needed.
 
-In this paper, that second measure, a structural inequivalence index, is proposed and tested in two settings. The first is a small public network in which every result can be inspected: 71 lawyers linked through advice, friendship, and coworking, three layers that play the role of family, work, and neighborhood in register data. The second is a set of simulated register-like populations in which the true difference between groups is known. All code is open and built on \texttt{mlnlib},\footnote{\url{https://github.com/planet-nl/mlnlib}} the library used for the Dutch population-scale network.
+In this paper, that second measure, a structural inequivalence index, is proposed and tested in two settings. The first is a small public network in which every result can be inspected: 71 lawyers linked through advice, friendship, and coworking, three layers, much like the multiple contexts recorded in register data. The second is a set of simulated register-like populations in which the true difference between groups is known. All code is open and built on \texttt{mlnlib},\footnote{\url{https://github.com/planet-nl/mlnlib}} the library used for the Dutch population-scale network.
 
 \section{Data}
 The data come from the Lazega law firm network \citep{lazega2001}, downloaded from the public Netzschleuder catalogue. It covers 71 lawyers of a corporate law firm in New England and records three relationships among them: advice, friendship, and coworking.
