@@ -36,7 +36,7 @@ The main problem comes from relying on assortativity, the tendency of ties to co
 In this paper, that second measure, a structural inequivalence index, is proposed and tested in two settings. The first is a small public network in which every result can be inspected: 71 lawyers linked through advice, friendship, and coworking, three layers, much like the multiple contexts recorded in register data. The second is a set of simulated register-like populations in which the true difference between groups is known. All code is open and built on \texttt{mlnlib},\footnote{\url{https://github.com/planet-nl/mlnlib}} the library used for the Dutch population-scale network.
 
 \section{Data}
-The data come from the Lazega law firm network \citep{lazega2001}, downloaded from the public Netzschleuder catalogue. It covers 71 lawyers of a corporate law firm in New England and records three relationships among them: advice, friendship, and coworking.
+The data come from the Lazega law firm network \citep{lazega2001}, downloaded from the public Netzschleuder catalog. It covers 71 lawyers of a corporate law firm in New England and records three relationships among them: advice, friendship, and coworking.
 
 The original nominations are directed: lawyer A names lawyer B. They are converted into undirected ties, so a tie exists if either of the two lawyers names the other. This leaves 717 advice ties, 399 friendship ties, and 726 coworking ties.
 

@@ -43,7 +43,7 @@ def fig4():
     fig, ax = plt.subplots(figsize=(6.5, 3.8))
     ax.plot(s["delta"], s["flag_rate"], "o-", color="#1F3A5F", label="Flagged as different (p < 0.05)")
     ax.plot(s["delta"][s.delta > 0], s["work_layer_on_top"][s.delta > 0], "s--", color="#C44E52", label="Decomposition points to the work layer")
-    ax.axhline(0.05, color="grey", lw=0.8, ls=":")
+    ax.axhline(0.05, color="gray", lw=0.8, ls=":")
     ax.set_xlabel("Planted effect: relative increase in work-tie probability for subgroup A (0.5 = +50%)")
     ax.set_ylabel("Share of simulated populations"); ax.set_ylim(-0.02, 1.05)
     ax.set_title("Simulation: the index finds planted differences\nand stays at its nominal level when there are none", fontsize=10)

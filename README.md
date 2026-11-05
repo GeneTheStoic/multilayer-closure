@@ -14,7 +14,7 @@ A small, reproducible study of how social contexts overlap in a multilayer netwo
 
 ## Data
 
-- **Source:** Lazega law firm network (Lazega, 2001), from the Netzschleuder catalogue (`law_firm`, data hosted by Manlio De Domenico). File: `data/raw/network.csv.zip`.
+- **Source:** Lazega law firm network (Lazega, 2001), from the Netzschleuder catalog (`law_firm`, data hosted by Manlio De Domenico). File: `data/raw/network.csv.zip`.
 - **Network:** 71 lawyers of a corporate law firm in New England, three layers. Directed nominations are symmetrized (a tie exists if either lawyer names the other): **advice 717, friendship 399, coworker 726** undirected ties.
 - **Attributes:** status (36 partners, 35 associates), office (Boston 48, Hartford 19, Providence 4), practice (litigation 41, corporate 30), gender (53 men, 18 women).
 
